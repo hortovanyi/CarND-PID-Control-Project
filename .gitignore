@@ -2,3 +2,11 @@
 build
 tags
 .editorconfig
+
+/Debug
+
+.cproject
+
+.project
+
+.settings/language.settings.xml
