@@ -1,7 +1,33 @@
 # CarND-Controls-PID
 Self-Driving Car Engineer Nanodegree Program
-
 ---
+![75 MPH speedster](https://github.com/hortovanyi/CarND-PID-Control-Project/blob/master/speedster75mph-small.png?raw=true)
+##PID Controller
+For this project I used two PID controllers. One to control the steering angle and the other the throttle. The first lap or two,   the Cross Track Error (CTE) for the steering angle is higher then later laps.
+
+I created a simple set of if tests, to find a desired speed, based on an average of the last 20 absolute steering angles used. The idea being that the straighter a car is driving, the higher the speed. The simulator is limited to 100 MPH. I was able to reach high 70 MPH speeds. On the rare occasion this configuration as is just hits 80 MPH. 
+
+If the absolute steering CTE is closer to zero i.e. the vehicle is on path, then the desired speed is increased. As the absolute CTE increases the desired speed is decreased. I found if I tried to break too quickly, then it induced oscillation that was often not correctable.
+
+To create a CTE for the throttle I used the existing speed - desired speed as input to the throttle PID controller update error function. The PID as initialised induced both breaking and acceleration. My first attempts, had no breaking, just acceleration and the car would land in the lake. The current settings provide a nice balance whilst keeping the vehicle on track.
+
+The steering PID class was initialised with the following values
+```
+double Kp = 0.1;  // proportional coefficient
+double Ki = 0.003;  // integral coefficient
+double Kd = 3.0;  // differential coefficient
+```
+
+The values themselves were found by manual tuning based initially on the values from the lessons.
+
+A larger value for Kp caused high proportional gain and oscillation. With Kp = 0.9 [this video shows](https://www.youtube.com/watch?v=44jhBRV-m3k) how eventually the oscillation caused the vehicle to crash on the hard left turn.
+
+A smaller value for Kd < 1.0, caused low differential gain i.e. the PID controller was underdamped. The oscillation was severe and caused the vehicle to leave the track shortly after starting [per this video](https://www.youtube.com/watch?v=AEbfu3abMLA).   
+
+Larger integral coefficient > ~0.003, did not result in much forward movement. I did not create a video, if you set it to 0.1 shortly after starting, the car will circle and not drive straight down the road.
+
+[Full Video of a few laps Kp = 0.1, Ki = 0.004, Kd = 3.0](https://www.youtube.com/watch?v=-DYt5eV8ZqQ)
+
 
 ## Dependencies
 
