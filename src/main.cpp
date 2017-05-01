@@ -84,47 +84,51 @@ int main() {
 
               // only keep so many
               if (steering_history.size() > 20)
-              steering_history.pop_back();
+                steering_history.pop_back();
 
               double avg_angle = std::accumulate(steering_history.begin(), steering_history.end(), 0.0) / steering_history.size();
               double abs_avg_angle = fabs(avg_angle);
 
               // setup desired speed
-              double desired_speed= 60;
+              double desired_speed= 50;
 
               // get some speed up first
               if (speed > 15) {
-                if (abs_avg_angle < 1.5)
+                if (abs_avg_angle < 1)
                   desired_speed = 100;
+                else if (abs_avg_angle < 1.5)
+                  desired_speed = 90;
                 else if (abs_avg_angle < 3)
-                  desired_speed = 80;
-                else if (abs_avg_angle < 5)
                   desired_speed = 65;
-                else if (abs_avg_angle < 7)
+                else if (abs_avg_angle < 4)
                   desired_speed = 55;
-                else if (abs_avg_angle > 10)
-                  desired_speed = -10; // break
-                else
+                else if (abs_avg_angle < 5)
+                  desired_speed = 45;
+                else if (abs_avg_angle < 6)
+                  desired_speed = 35;
+                else if (abs_avg_angle < 8)
                   desired_speed = 25;
+                else if (abs_avg_angle > 10)
+                  desired_speed = 15; // slow down
               }
 
               // adjust desired speed also for CTE
               if (speed > 25) {
-              double acte = fabs(cte);
-              if (acte < .1)
-                desired_speed += 20;
-              else if (acte < .2  )
-                desired_speed += 10;
-              else if (acte < .3)
-                desired_speed -= 5;
-              else if (acte < .5 )
-                desired_speed -= 15;
-              else if (acte < .7)
-                desired_speed -= 25;
-              else if (acte > .8)
-                desired_speed = -10; // break
-              else
-                desired_speed = 5;// slow down
+                double acte = fabs(cte);
+                if (acte < .1)
+                  desired_speed += 20;
+                else if (acte < .2  )
+                  desired_speed += 10;
+                else if (acte < .3)
+                  desired_speed -= 5;
+                else if (acte < .5 )
+                  desired_speed -= 15;
+                else if (acte < .7)
+                  desired_speed -= 25;
+                else if (acte > .8)
+                  desired_speed = -10; // break
+                else
+                  desired_speed = 5;// slow down
               }
               pidt.UpdateError(speed-desired_speed);
               double throttle = pidt.TotalError();
