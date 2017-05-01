@@ -41,7 +41,7 @@ int main() {
   PID pid;
   // TODO: Initialize the pid variable.
   double Kp = 0.1;  // proportional coefficient
-  double Ki = 0.004;  // integral coefficient
+  double Ki = 0.003;  // integral coefficient
   double Kd = 3.0;  // differential coefficient
   pid.Init(Kp, Ki, Kd);
 
