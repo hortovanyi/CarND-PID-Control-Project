@@ -40,7 +40,7 @@ int main() {
   // steering pid
   PID pid;
   // TODO: Initialize the pid variable.
-  double Kp = 0.2;  // proportional coefficient
+  double Kp = 0.1;  // proportional coefficient
   double Ki = 0.004;  // integral coefficient
   double Kd = 3.0;  // differential coefficient
   pid.Init(Kp, Ki, Kd);
@@ -49,7 +49,7 @@ int main() {
 
   // throttle pid
   PID pidt;
-  pidt.Init(2, 0.001, 6);
+  pidt.Init(2, 0.001, 4);
 
   h.onMessage(
       [&pid,&pidt,&steering_history](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
@@ -75,9 +75,6 @@ int main() {
                * another PID controller to control the speed!
                */
 
-              pid.UpdateError(cte);
-
-              steer_value = pid.TotalError();
 
               // steering history
               steering_history.push_front(angle);
@@ -133,6 +130,19 @@ int main() {
               pidt.UpdateError(speed-desired_speed);
               double throttle = pidt.TotalError();
 
+
+              // update steering
+//              if (speed > 55) {
+//                pid.Kp = 0.1;
+//                pid.Ki = 0.004;
+//                pid.Kd = 6;
+//              } else {
+//                pid.Kp = 0.1;
+//                pid.Ki = 0.004;
+//                pid.Kd = 3;
+//              }
+              pid.UpdateError(cte);
+              steer_value = pid.TotalError();
               // DEBUG
               std::cout << "CTE: " << cte << " Steering Value: " << steer_value << " Angle: " << angle << " Avg Angle: " << avg_angle
               << " Speed: " << speed << std::endl;
