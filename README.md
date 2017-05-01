@@ -2,7 +2,9 @@
 Self-Driving Car Engineer Nanodegree Program
 ---
 ![75 MPH speedster](https://github.com/hortovanyi/CarND-PID-Control-Project/blob/master/speedster75mph-small.png?raw=true)
+
 ##PID Controller
+
 For this project I used two PID controllers. One to control the steering angle and the other the throttle. The first lap or two,   the Cross Track Error (CTE) for the steering angle is higher then later laps.
 
 I created a simple set of if tests, to find a desired speed, based on an average of the last 20 absolute steering angles used. The idea being that the straighter a car is driving, the higher the speed. The simulator is limited to 100 MPH. I was able to reach high 70 MPH speeds. On the rare occasion this configuration as is just hits 80 MPH. 
